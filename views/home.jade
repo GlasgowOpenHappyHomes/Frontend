@@ -1,8 +1,14 @@
 extends layout
 
 block content
-  h1 Bootstrap starter template
-  p.lead
-    | Use this document as a way to quickly start any new project.
-    br
-    | All you get is this text and a mostly barebones HTML document.
+  .col-md-2.left-column-home.fullheight.home-left-content
+    <h4 id="location_name">Location Name</h4>
+
+    <h3>Last 48 Hours</h3>
+    <p>Min Power: <span id="min_power">xxx</span></p>
+    <p>Max Power: <span id="max_power">xxx</span></p>
+
+  .col-md-12.home-right-content
+    <div id="map-canvas" class="fullheight" style="width: 100%"></div>
+
+    <span id="homepage-flag" style="display: none" />
