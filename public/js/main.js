@@ -6,6 +6,10 @@ $(document).ready(function() {
   	$('.fullheight').css('height', (window.innerHeight - 120).toString() + 'px');
   });
 
+  $('.filters-button').click(function() {
+  	$('#filter-box').toggleClass('hidden');
+  })
+
   if($("#homepage-flag").length > 0) {
     //awesome - we're on the homepage, lets start mapping this shizz
 
@@ -71,16 +75,21 @@ $(document).ready(function() {
 		url: "http://happyhomes-api.herokuapp.com/locations/?limit=40"
 	})
 	.done(function( data ) {
+		var happy = true;
 		for (var i = 0; i < data.length; i++) {
     		if(data[i].location !== null) {
     			console.log(data[i]);
+    			
     			//we have a lat long
+				happy = (Math.random() < 0.5);
+
 				var properties = {
 			        position: new google.maps.LatLng(data[i].location.x, data[i].location.y),
 			        map: map,
 			        title: data[i].name,
-			        locationid: data[i].id
-			        //icon: 'icon.jpg'
+			        locationid: data[i].id,
+			        icon: happy ? 'img/happy.png' : 'img/sad.gif',
+			        happy: happy
 				};
 				var marker = new google.maps.Marker(properties);
 
@@ -91,17 +100,18 @@ $(document).ready(function() {
 					  locationname = that.title;
 
 					  $.ajax({
-						url: "http://happyhomes-api.herokuapp.com/stats/getStats?location_id="+locationid.toString()
+						url: "http://happyhomes-api.herokuapp.com/stats/getStats?location_id="+locationid.toString()+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString()
 					  }).done(function(data) {
 					  	$('#min_power').html(data.min);
 					  	$('#max_power').html(data.max);
 					  	$('#location_name').html(locationname);
 
-					  	$('.home-left-content').addClass('col-md-2');
+					  	$('.home-left-content-initial').css('display', 'none');
 					  	$('.home-left-content').removeClass('home-left-content');
-					  	$('.home-right-content').css('display', '');
-					  	$('.home-right-content').removeClass('col-md-12');
-					  	$('.home-right-content').addClass('col-md-10');
+
+					  	$('.is-happy').removeClass('happy-background');
+					  	$('.is-happy').removeClass('sad-background');
+					  	$('.is-happy').addClass(that.happy ? 'happy-background' : 'sad-background');
 
 					  });
 					});
