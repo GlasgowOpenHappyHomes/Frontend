@@ -10,7 +10,7 @@ $(document).ready(function() {
   	$('#filter-box').toggleClass('hidden');
   })
 
-	 $.getJSON("http://happyhomes-api.herokuapp.com/locations", null, function(data) {
+	 $.getJSON("http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/locations?limit=50", null, function(data) {
 	    $(".chosen-select option").remove(); // Remove all <option> child tags.
 	     $(".chosen-select").append( // Append an object to the inside of the select box
 	            $("<option></option>"));
@@ -174,7 +174,7 @@ $(document).ready(function() {
 	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
 
 	$.ajax({
-		url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/locations/?limit=20"
+		url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/locations/?limit=50"
 	})
 	.done(function( data ) {
 		var happy = true;
