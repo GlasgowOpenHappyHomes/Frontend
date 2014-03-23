@@ -10,6 +10,50 @@ $(document).ready(function() {
   	$('#filter-box').toggleClass('hidden');
   })
 
+	 $.getJSON("http://happyhomes-api.herokuapp.com/locations", null, function(data) {
+	    $(".chosen-select option").remove(); // Remove all <option> child tags.
+	     $(".chosen-select").append( // Append an object to the inside of the select box
+	            $("<option></option>"));
+	    $.each(data, function(index, item) { // Iterates through a collection
+	        $(".chosen-select").append( // Append an object to the inside of the select box
+	            $("<option></option>") // Yes you can do this.
+	                .text(item.name)
+	                .val(item.id)
+	        );
+	    });
+	}).complete(function() {
+		$(".chosen-select").chosen();		
+	});
+
+	$('#search-button').click(function() {
+		var id=$(".chosen-select").val();
+		$.getJSON("http://happyhomes-api.herokuapp.com/locations/"+id, null, function(data) {
+		    var newCenter = new google.maps.LatLng(data.location.x,data.location.y);
+		    map.setCenter(newCenter);
+		    var name = data.name;
+		    alert(name);
+			require(["d3"], function(d3) {
+			locationid = id;
+			locationname = name;
+					  $.ajax({
+						url: "http://happyhomes-api.herokuapp.com/stats/getStats?location_id="+locationid+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString()
+					  }).done(function(data) {
+					  	$('#min_power').html(data.min);
+					  	$('#max_power').html(data.max);
+					  	$('#location_name').html(locationname);
+
+					  	$('.home-left-content-initial').css('display', 'none');
+					  	$('.home-left-content').removeClass('home-left-content');
+
+					  	$('.is-happy').removeClass('happy-background');
+					  	$('.is-happy').removeClass('sad-background');
+					  	$('.is-happy').addClass(that.happy ? 'happy-background' : 'sad-background');
+
+					  });
+					});
+		});
+	});
+
   if($("#homepage-flag").length > 0) {
     //awesome - we're on the homepage, lets start mapping this shizz
 
