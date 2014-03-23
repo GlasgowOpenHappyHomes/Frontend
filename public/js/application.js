@@ -14,3 +14,7 @@
 //= require lib/require
 //= require lib/d3
 //= require main
+//= require lib/chosen.jquery.js
+//= require lib/chosen.jquery.min.js
+//= require lib/chosen.proto.js
+//= require lib/chosen.proto.min.js

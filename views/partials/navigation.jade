@@ -14,5 +14,10 @@
         li(class=title=='Contact'?'active':undefined)
           a(href='/contact') Contact
       ul.nav.navbar-nav.navbar-right
+        li(class=title=='Search'?'active search-input':'search-input')
+          form
+            <select data-placeholder="Search" style="width:350px;v display:none;" class="chosen-select"></select>
+            input(id="search-button" type='button',value='Search')  
+
         li(class=title=='Filters'?'active filters-button':'filters-button')
           a(href='#') Filters
