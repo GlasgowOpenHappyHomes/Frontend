@@ -1,0 +1,123 @@
+extends layout
+
+body
+	script
+	
+block content
+
+	var margin = {top: 10, right: 50, bottom: 20, left: 50},
+	    width = 120 - margin.left - margin.right,
+	    height = 500 - margin.top - margin.bottom;
+
+	var min = Infinity,
+	    max = -Infinity;
+
+	var chart = d3.box()
+	    .whiskers(iqr(1.5))
+	    .width(width)
+	    .height(height);
+
+	d3.json("http://happyhomes-api.herokuapp.com/stats/getStats?location_id=18&dow=1&hour=12", function(error, json) {
+	  var data = [];
+
+	  data.push(json.rawData);
+		min = json.min
+		max = json.max
+
+	  chart.domain([min, max]);
+
+	  var svg = d3.select("body").selectAll("svg")
+	      .data(data)
+	    .enter().append("svg")
+	      .attr("class", "box")
+	      .attr("width", width + margin.left + margin.right)
+	      .attr("height", height + margin.bottom + margin.top)
+	    .append("g")
+	      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+	      .call(chart);
+
+	  setInterval(function() {
+	    svg.datum(update).call(chart.duration(1000));
+	  }, 60 * 1000);
+	});
+
+	function update(d) {
+		d3.json("http://happyhomes-api.herokuapp.com/stats/getStats?location_id=18&dow=1&hour=12", function(error, json) {
+		  var data = [];
+
+		  data.push(json.rawData);
+			min = json.min
+			max = json.max
+	
+			return data;
+		})
+	
+	}
+
+	// Returns a function to compute the interquartile range.
+	function iqr(k) {
+	  return function(d, i) {
+	    var q1 = d.quartiles[0],
+	        q3 = d.quartiles[2],
+	        iqr = (q3 - q1) * k,
+	        i = -1,
+	        j = d.length;
+	    while (d[++i] < q1 - iqr);
+	    while (d[--j] > q3 + iqr);
+	    return [i, j];
+	  };
+	}
+
+  #filter-box.hidden
+    <form role="form" action="#">
+    <div class="form-group">
+    <label for="exampleInputEmail1">Number of Locations</label>
+    <select type="select" class="form-control" id="exampleInputEmail1" placeholder="40">
+    <option id="10">0 - 10</option>
+    <option id="50">10 - 50</option>
+    <option id="100">50 - 100</option>
+    <option id="1000">All Locations (Very Noisy)</option>
+    </select>
+    </div>
+    <div class="form-group">
+    <label for="exampleInputEmail1">Day of Week</label>
+    <select type="select" class="form-control" id="exampleInputEmail1" placeholder="Monday">
+    <option id="1">Monday</option>
+    <option id="1">Tuesday</option>
+    <option id="1">Wednesday</option>
+    <option id="1">Thursday</option>
+    <option id="1">Friday</option>
+    <option id="1">Saturday</option>
+    <option id="1">Sunday</option>
+    </select>
+    </div>
+    <div class="form-group">
+    <label for="exampleInputPassword1">Time of Day</label>
+    <select type="select" class="form-control" id="exampleInputEmail1" placeholder="01:00">
+    <option id="1">01:00</option>
+    <option id="2">02:00</option>
+    <option id="3">03:00</option>
+    <option id="4">04:00</option>
+    <option id="5">05:00</option>
+    <option id="6">06:00</option>
+    <option id="7">07:00</option>
+    <option id="8">08:00</option>
+    <option id="9">09:00</option>
+    <option id="10">10:00</option>
+    <option id="11">11:00</option>
+    <option id="12">12:00</option>
+    <option id="13">13:00</option>
+    <option id="14">14:00</option>
+    <option id="15">15:00</option>
+    <option id="16">16:00</option>
+    <option id="17">17:00</option>
+    <option id="18">18:00</option>
+    <option id="19">19:00</option>
+    <option id="20">20:00</option>
+    <option id="21">21:00</option>
+    <option id="22">22:00</option>
+    <option id="23">23:00</option>
+    </select>
+    </div>
+    <button type="submit" class="btn btn-default">Filter</button>
+    </form>
