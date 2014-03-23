@@ -1,29 +1,9 @@
 extends layout
 
-block content
-  .col-md-2.left-column-home.fullheight.home-left-content.is-happy
-    <h4 id="location_name">Location Name</h4>
-
-    <h3>Last 48 Hours</h3>
-    <p>Min Power: <span id="min_power">xxx</span></p>
-    <p>Max Power: <span id="max_power">xxx</span></p>
-
-  .col-md-2.left-column-home.fullheight.home-left-content-initial
-    <h3>Happy Homes</h3>
-    <p>Happy Homes allows you to view how energy efficient public buildings are, in Glasgow, with the use of smiley faces.</p>
-    <br />
-    <img src="img/veryhappy_50.png"> <br />
-    <img src="img/happy_50.png"> <br />
-    <img src="img/neutral_50.png"> <br />
-    <img src="img/sad_50.png"> <br />
-    <img src="img/verysad_50.png"> <br />
-
-  .col-md-10.home-right-content
-    <div id="map-canvas" class="fullheight" style="width: 100%"></div>
-
-    <div id="map-canvas" class="fullheight" style="width: 100%">Please Wait...</div>
-
-    <span id="homepage-flag" style="display: none" />
+block append head
+    script(type='text/javascript', src='/js/lib/d3.box.min')
+    script(type='text/javascript', src='/js/boxplot.js')
+body
 
   #filter-box.hidden
     <form role="form" action="#">

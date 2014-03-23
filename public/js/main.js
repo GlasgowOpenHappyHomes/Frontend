@@ -104,7 +104,7 @@ $(document).ready(function() {
 	zoom: 11,
 	center: Glasgow
 	}
-	map = new google.maps.Map(mapDiv, mapOptions);
+	var map = new google.maps.Map(mapDiv, mapOptions);
 
 	// Create the DIV to hold the control and
 	// call the HomeControl() constructor passing
@@ -116,7 +116,7 @@ $(document).ready(function() {
 	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
 
 	$.ajax({
-		url: "http://happyhomes-api.herokuapp.com/locations/?limit=40"
+		url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/locations/?limit=40"
 	})
 	.done(function( data ) {
 		var happy = true;
@@ -125,41 +125,105 @@ $(document).ready(function() {
     			console.log(data[i]);
     			
     			//we have a lat long
-				happy = (Math.random() < 0.5);
+				happy = 'neutral';
 
-				var properties = {
-			        position: new google.maps.LatLng(data[i].location.x, data[i].location.y),
-			        map: map,
-			        title: data[i].name,
-			        locationid: data[i].id,
-			        icon: happy ? 'img/happy.png' : 'img/sad.gif',
-			        happy: happy
-				};
-				var marker = new google.maps.Marker(properties);
+				//http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/currentReading?location_id=18
+				console.log(data[i]);
+				var placeid = data[i].id;
+				
+				if(placeid == undefined) {
+					var placeid = data[i].id;
+				}
+				placeid = data[i].id;
 
-				google.maps.event.addListener(marker, 'click', function() {
-				    var that = this;
-				    require(["d3"], function(d3) {
-					  locationid = that.locationid;
-					  locationname = that.title;
+				if(location == undefined) {
+					var location = data[i].location;
+				}
+				location = data[i].location;
 
-					  $.ajax({
-						url: "http://happyhomes-api.herokuapp.com/stats/getStats?location_id="+locationid.toString()+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString()
-					  }).done(function(data) {
-					  	$('#min_power').html(data.min);
-					  	$('#max_power').html(data.max);
-					  	$('#location_name').html(locationname);
+				if(locationid == undefined) {
+					var locationid = data[i].id;
+				}
+				locationid = data[i].id;
 
-					  	$('.home-left-content-initial').css('display', 'none');
-					  	$('.home-left-content').removeClass('home-left-content');
+				if(placeid == undefined) {
+					var placeid = data[i].id;
+				}
+				placeid = data[i].id;
 
-					  	$('.is-happy').removeClass('happy-background');
-					  	$('.is-happy').removeClass('sad-background');
-					  	$('.is-happy').addClass(that.happy ? 'happy-background' : 'sad-background');
+				console.log(location);
 
-					  });
+				if(name == undefined) {
+					var name = data[i].name;
+				}
+				name = data[i].name;
+				console.log(name);
+
+				$.ajax({
+					url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/currentReading?location_id="+placeid.toString(),
+					async: false
+				}).done(function(data) {
+					var currentdata = data;
+					$.ajax({
+						url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/stats/getStats?location_id="+placeid.toString()+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString(),
+						async: false
+						}).done(function(data) {
+							console.log(currentdata);
+						if(currentdata[0].reading <= data.lower_whisker) {
+							happy = 'veryhappy';
+						} else if(currentdata[0].reading <= data.lower_quartile) {
+							happy = 'happy';
+						} else if(currentdata[0].reading >= data.lower_quartile && currentdata[0].reading <= data.upper_quartile) {
+							happy = 'neutral';
+						} else if(currentdata[0].reading >= data.upper_quartile) {
+							happy = 'sad';
+						} else {
+							happy = 'verysad';
+						}
+
+						if(properties == undefined) {
+							var properties = {};
+						}
+
+						properties = {
+					        position: new google.maps.LatLng(location.x, location.y),
+					        map: map,
+					        title: name,
+					        locationid: this.locationid,
+					        icon: 'img/' + happy + '_50.png',
+					        happy: happy
+						};
+						var marker = new google.maps.Marker(properties);
+						console.log(properties);
+
+						that = properties;
+
+						google.maps.event.addListener(marker, 'click', function() {
+						    var that = this;
+						    require(["d3"], function(d3) {
+							  locationname = that.title;
+
+							  $.ajax({
+								url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/stats/getStats?location_id="+locationid.toString()+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString()
+							  }).done(function(data) {
+							  	$('#min_power').html(data.min);
+							  	$('#max_power').html(data.max);
+							  	$('#location_name').html(locationname);
+
+							  	$('.home-left-content-initial').css('display', 'none');
+							  	$('.home-left-content').removeClass('home-left-content');
+
+							  	$('.is-happy').removeClass('happy-background');
+							  	$('.is-happy').removeClass('sad-background');
+							  	$('.is-happy').removeClass('veryhappy-background');
+							  	$('.is-happy').removeClass('verysad-background');
+							  	$('.is-happy').removeClass('neutral-background');
+							  	$('.is-happy').addClass(that.happy+'-background');
+							  });
+							});
+						});
 					});
-				});
+				})
     		}
 		}
 	});
