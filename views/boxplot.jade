@@ -1,9 +1,9 @@
 extends layout
 
-body
+block append head
     script(type='text/javascript', src='/js/lib/d3.box.min')
     script(type='text/javascript', src='/js/boxplot.js')
-
+body
 
   #filter-box.hidden
     <form role="form" action="#">
