@@ -13,6 +13,5 @@
 //= require lib/bootstrap.min
 //= require lib/require
 //= require lib/d3
-//= require lib/d3.box.min
 //= require main
 //= require boxplot
