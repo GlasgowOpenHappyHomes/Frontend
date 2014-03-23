@@ -1,14 +1,73 @@
 extends layout
 
 block content
-  .col-md-2.left-column-home.fullheight.home-left-content
+  .col-md-2.left-column-home.fullheight.home-left-content.is-happy
     <h4 id="location_name">Location Name</h4>
 
     <h3>Last 48 Hours</h3>
     <p>Min Power: <span id="min_power">xxx</span></p>
     <p>Max Power: <span id="max_power">xxx</span></p>
 
-  .col-md-12.home-right-content
+  .col-md-2.left-column-home.fullheight.home-left-content-initial
+    <h4 id="location_name">Some initial content</h4>
+
+    <p>Pre-fill this post-demo</p>
+
+  .col-md-10.home-right-content
     <div id="map-canvas" class="fullheight" style="width: 100%"></div>
 
     <span id="homepage-flag" style="display: none" />
+
+  #filter-box.hidden
+    <form role="form" action="#">
+    <div class="form-group">
+    <label for="exampleInputEmail1">Number of Locations</label>
+    <select type="select" class="form-control" id="exampleInputEmail1" placeholder="40">
+    <option id="10">0 - 10</option>
+    <option id="50">10 - 50</option>
+    <option id="100">50 - 100</option>
+    <option id="1000">All Locations (Very Noisy)</option>
+    </select>
+    </div>
+    <div class="form-group">
+    <label for="exampleInputEmail1">Day of Week</label>
+    <select type="select" class="form-control" id="exampleInputEmail1" placeholder="Monday">
+    <option id="1">Monday</option>
+    <option id="1">Tuesday</option>
+    <option id="1">Wednesday</option>
+    <option id="1">Thursday</option>
+    <option id="1">Friday</option>
+    <option id="1">Saturday</option>
+    <option id="1">Sunday</option>
+    </select>
+    </div>
+    <div class="form-group">
+    <label for="exampleInputPassword1">Time of Day</label>
+    <select type="select" class="form-control" id="exampleInputEmail1" placeholder="01:00">
+    <option id="1">01:00</option>
+    <option id="2">02:00</option>
+    <option id="3">03:00</option>
+    <option id="4">04:00</option>
+    <option id="5">05:00</option>
+    <option id="6">06:00</option>
+    <option id="7">07:00</option>
+    <option id="8">08:00</option>
+    <option id="9">09:00</option>
+    <option id="10">10:00</option>
+    <option id="11">11:00</option>
+    <option id="12">12:00</option>
+    <option id="13">13:00</option>
+    <option id="14">14:00</option>
+    <option id="15">15:00</option>
+    <option id="16">16:00</option>
+    <option id="17">17:00</option>
+    <option id="18">18:00</option>
+    <option id="19">19:00</option>
+    <option id="20">20:00</option>
+    <option id="21">21:00</option>
+    <option id="22">22:00</option>
+    <option id="23">23:00</option>
+    </select>
+    </div>
+    <button type="submit" class="btn btn-default">Filter</button>
+    </form>
