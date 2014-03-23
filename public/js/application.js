@@ -14,3 +14,4 @@
 //= require lib/require
 //= require lib/d3
 //= require main
+//= require boxplot
