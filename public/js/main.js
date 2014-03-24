@@ -10,7 +10,7 @@ $(document).ready(function() {
   	$('#filter-box').toggleClass('hidden');
   })
 
-	 $.getJSON("http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/locations?limit=50", null, function(data) {
+	 $.getJSON("http://happyhomes-api.herokuapp.com/locations?limit=50", null, function(data) {
 	    $(".chosen-select option").remove(); // Remove all <option> child tags.
 	     $(".chosen-select").append( // Append an object to the inside of the select box
 	            $("<option></option>"));
@@ -36,18 +36,18 @@ $(document).ready(function() {
 			locationid = id;
 			locationname = name;
 					  $.ajax({
-						url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/stats/getStats?location_id="+locationid+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString()
+						url: "http://happyhomes-api.herokuapp.com/stats/getStats?location_id="+locationid+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString()
 					  }).done(function(data) {
 //					  	console.log(locationid);
 					  	$.ajax({
-							url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/currentReading?location_id="+locationid.toString(),
+							url: "http://happyhomes-api.herokuapp.com/currentReading?location_id="+locationid.toString(),
 							async: false
 						}).done(function(data) {
 							var id = data.id;
 							var currentdata = data;
 							console.log(data);
 							$.ajax({
-								url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/stats/getStats?location_id="+locationid.toString()+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString(),
+								url: "http://happyhomes-api.herokuapp.com/stats/getStats?location_id="+locationid.toString()+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString(),
 								async: false
 								}).done(function(data) {
 									console.log(currentdata);
@@ -87,7 +87,7 @@ $(document).ready(function() {
 									  locationname = that.title;
 
 									  $.ajax({
-										url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/stats/getStats?location_id="+locationid.toString()+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString()
+										url: "http://happyhomes-api.herokuapp.com/stats/getStats?location_id="+locationid.toString()+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString()
 									  }).done(function(data) {
 									  	$('#min_power').html(data.min + " kW");
 									  	$('#max_power').html(data.max + " kW");
@@ -174,7 +174,7 @@ $(document).ready(function() {
 	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
 
 	$.ajax({
-		url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/locations/?limit=50"
+		url: "http://happyhomes-api.herokuapp.com/locations/?limit=50"
 	})
 	.done(function( data ) {
 		var happy = true;
@@ -185,7 +185,7 @@ $(document).ready(function() {
     			//we have a lat long
 				happy = 'neutral';
 
-				//http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/currentReading?location_id=18
+				//http://happyhomes-api.herokuapp.com/currentReading?location_id=18
 				console.log(data[i]);
 				var placeid = data[i].id;
 				
@@ -223,12 +223,12 @@ $(document).ready(function() {
 				console.log(name);
 
 				$.ajax({
-					url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/currentReading?location_id="+placeid.toString(),
+					url: "http://happyhomes-api.herokuapp.com/currentReading?location_id="+placeid.toString(),
 					async: false
 				}).done(function(data) {
 					var currentdata = data;
 					$.ajax({
-						url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/stats/getStats?location_id="+placeid.toString()+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString(),
+						url: "http://happyhomes-api.herokuapp.com/stats/getStats?location_id="+placeid.toString()+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString(),
 						async: false
 						}).done(function(data) {
 							console.log(currentdata);
@@ -272,7 +272,7 @@ $(document).ready(function() {
 							  locationll = that.locationid
 							  console.log(that);
 							  $.ajax({
-								url: "http://ec2-54-195-116-140.eu-west-1.compute.amazonaws.com/stats/getStats?location_id="+locationll.toString()+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString()
+								url: "http://happyhomes-api.herokuapp.com/stats/getStats?location_id="+locationll.toString()+'&dow='+(new Date().getDay() + 1).toString()+'&hour='+new Date().getHours().toString()
 							  }).done(function(data) {
 							  	console.log(data);
 							  	$('#min_power').html(data.min + " kW");
